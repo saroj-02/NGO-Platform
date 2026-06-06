@@ -25,7 +25,7 @@ export function Navbar() {
             <Heart className="size-5" fill="currentColor" />
           </span>
           <span className="font-heading text-lg font-extrabold tracking-tight text-foreground">
-            HopeBridge
+            SG SAROJ GROUPS
           </span>
         </Link>
 
