@@ -14,15 +14,15 @@ export type Campaign = {
 
 export const campaigns: Campaign[] = [
   {
-    slug: 'clean-water-for-kibera',
-    title: 'Clean Water Wells for Kibera',
+    slug: 'clean-water-for-bundelkhand',
+    title: 'Clean Water Wells for Bundelkhand',
     category: 'Water',
-    location: 'Nairobi, Kenya',
+    location: 'Bundelkhand, Uttar Pradesh',
     image: '/images/campaign-water.png',
     summary:
       'Build six solar-powered wells delivering safe drinking water to 12,000 people and ending the daily walk for water.',
-    raised: 84200,
-    goal: 120000,
+    raised: 6820000,
+    goal: 9600000,
     donors: 1842,
     daysLeft: 21,
     featured: true,
@@ -31,12 +31,12 @@ export const campaigns: Campaign[] = [
     slug: 'classrooms-for-every-child',
     title: 'Classrooms for Every Child',
     category: 'Education',
-    location: 'Sylhet, Bangladesh',
+    location: 'Sundarbans, West Bengal',
     image: '/images/campaign-education.png',
     summary:
       'Fund teachers, supplies, and three new classrooms so 600 children can continue their education year-round.',
-    raised: 56750,
-    goal: 90000,
+    raised: 4560000,
+    goal: 7200000,
     donors: 1120,
     daysLeft: 34,
     featured: true,
@@ -45,12 +45,12 @@ export const campaigns: Campaign[] = [
     slug: 'meals-for-families',
     title: 'Emergency Meals for Families',
     category: 'Food',
-    location: 'Tigray, Ethiopia',
+    location: 'Marathwada, Maharashtra',
     image: '/images/campaign-food.png',
     summary:
       'Provide nutritious food parcels to 3,500 families facing acute shortages after a prolonged drought.',
-    raised: 102300,
-    goal: 110000,
+    raised: 8240000,
+    goal: 8800000,
     donors: 2630,
     daysLeft: 9,
     featured: true,
@@ -59,12 +59,12 @@ export const campaigns: Campaign[] = [
     slug: 'mobile-medical-clinics',
     title: 'Mobile Medical Clinics',
     category: 'Healthcare',
-    location: 'Rural Guatemala',
+    location: 'Rural Rajasthan',
     image: '/images/campaign-medical.png',
     summary:
-      'Equip two mobile clinics bringing checkups, vaccines, and maternal care to remote mountain villages.',
-    raised: 41900,
-    goal: 95000,
+      'Equip two mobile clinics bringing checkups, vaccines, and maternal care to remote desert villages.',
+    raised: 3380000,
+    goal: 7600000,
     donors: 870,
     daysLeft: 48,
   },
@@ -72,8 +72,8 @@ export const campaigns: Campaign[] = [
 
 export const impactStats = [
   { value: '2.4M', label: 'Lives impacted' },
-  { value: '46', label: 'Countries reached' },
-  { value: '$128M', label: 'Funds delivered' },
+  { value: '28', label: 'States reached' },
+  { value: '₹920Cr', label: 'Funds delivered' },
   { value: '94%', label: 'Goes to programs' },
 ]
 
@@ -89,26 +89,26 @@ export type Story = {
 export const stories: Story[] = [
   {
     slug: 'amara-back-in-school',
-    name: 'Amara',
+    name: 'Aarti',
     role: 'Student, age 11',
     image: '/images/story-portrait-1.png',
     excerpt:
-      'After her village gained a clean water well, Amara no longer walks four hours a day. She is back in school and dreams of becoming a nurse.',
+      'After her village gained a clean water well, Aarti no longer walks four hours a day. She is back in school and dreams of becoming a nurse.',
     category: 'Water & Education',
   },
   {
     slug: 'a-village-transformed',
-    name: 'Kibera Community',
-    role: 'Nairobi, Kenya',
+    name: 'Bundelkhand Community',
+    role: 'Uttar Pradesh',
     image: '/images/campaign-water.png',
     excerpt:
-      'In just eighteen months, waterborne illness dropped by 70% and school attendance doubled across the neighborhood.',
+      'In just eighteen months, waterborne illness dropped by 70% and school attendance doubled across the village.',
     category: 'Clean Water',
   },
   {
     slug: 'learning-without-limits',
-    name: 'Sylhet School',
-    role: 'Bangladesh',
+    name: 'Sundarbans School',
+    role: 'West Bengal',
     image: '/images/campaign-education.png',
     excerpt:
       'Three new classrooms and trained local teachers gave 600 children a safe place to learn through every season.',
