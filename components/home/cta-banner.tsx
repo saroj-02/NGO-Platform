@@ -1,15 +1,17 @@
 import Link from 'next/link'
-import { ArrowRight, Heart } from 'lucide-react'
+import { ArrowRight } from 'lucide-react'
 import { Button } from '@/components/ui/button'
+import { SmileLogo } from '@/components/smile-logo'
 
 export function CtaBanner() {
   return (
     <section className="bg-background pb-20">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="relative overflow-hidden rounded-3xl bg-accent-blue px-6 py-14 text-accent-blue-foreground sm:px-12 lg:px-16">
-          <Heart
+          <SmileLogo
+            pureSvg
             className="pointer-events-none absolute -right-8 -top-8 size-48 text-accent-blue-foreground/10"
-            fill="currentColor"
+            strokeWidth={1.5}
           />
           <div className="relative max-w-2xl">
             <h2 className="text-balance font-heading text-3xl font-bold tracking-tight sm:text-4xl">

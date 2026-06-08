@@ -4,7 +4,7 @@ import { PageHeader } from '@/components/page-header'
 import { CampaignsGrid } from '@/components/campaigns-grid'
 
 export const metadata = {
-  title: 'Campaigns — HopeBridge',
+  title: 'Campaigns — HFS',
   description:
     'Browse vetted campaigns for clean water, education, food, and healthcare. Choose a cause and follow your impact.',
 }

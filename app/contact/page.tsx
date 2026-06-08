@@ -11,28 +11,28 @@ import {
 } from '@/components/ui/accordion'
 
 export const metadata = {
-  title: 'Contact — HopeBridge',
+  title: 'Contact — HFS',
   description:
-    'Get in touch with the HopeBridge team. We respond within one business day.',
+    'Get in touch with the HFS (Help For Smile) team. We respond within one business day.',
 }
 
 const contactMethods = [
   {
     icon: Mail,
     title: 'Email us',
-    value: 'hello@hopebridge.org',
+    value: 'hello@helpforsmile.org',
     detail: 'For general questions and support',
   },
   {
     icon: Phone,
     title: 'Call us',
-    value: '+1 (800) 555-0142',
-    detail: 'Mon–Fri, 9am–6pm ET',
+    value: '+91 98765 43210',
+    detail: 'Mon–Fri, 9am–6pm IST',
   },
   {
     icon: MapPin,
     title: 'Visit us',
-    value: '120 Hope Street, New York, NY',
+    value: 'SG Road, Ahmedabad, Gujarat, India',
     detail: 'By appointment',
   },
 ]
@@ -40,11 +40,11 @@ const contactMethods = [
 const faqs = [
   {
     q: 'How much of my donation reaches the field?',
-    a: '94% of every dollar goes directly to program delivery. The remaining 6% covers essential operations and is fully disclosed in our annual report.',
+    a: '94% of every rupee goes directly to program delivery. The remaining 6% covers essential operations and is fully disclosed in our annual report.',
   },
   {
     q: 'Is my donation tax-deductible?',
-    a: 'Yes. HopeBridge is a registered 501(c)(3) nonprofit. You will receive an instant tax receipt by email for every gift.',
+    a: 'Yes. HFS is a registered nonprofit. You will receive an instant tax receipt by email for every gift.',
   },
   {
     q: 'Can I choose which campaign my gift supports?',
@@ -52,7 +52,7 @@ const faqs = [
   },
   {
     q: 'How do I volunteer or partner with you?',
-    a: 'Visit our Volunteer page to sign up, or email partnerships@hopebridge.org for organizational collaborations.',
+    a: 'Visit our Volunteer page to sign up, or email partnerships@helpforsmile.org for organizational collaborations.',
   },
 ]
 
@@ -99,7 +99,7 @@ export default function ContactPage() {
                   <MessageCircle className="size-5 text-brand" />
                   Frequently asked
                 </h2>
-                <Accordion type="single" collapsible className="mt-4">
+                <Accordion className="mt-4">
                   {faqs.map((faq, i) => (
                     <AccordionItem key={i} value={`faq-${i}`}>
                       <AccordionTrigger className="text-left font-medium text-foreground">

@@ -8,9 +8,9 @@ import { CtaBanner } from '@/components/home/cta-banner'
 import { impactStats } from '@/lib/data'
 
 export const metadata = {
-  title: 'About — HopeBridge',
+  title: 'About — HFS',
   description:
-    'Learn about HopeBridge: our mission, values, transparency, and the team building bridges of hope worldwide.',
+    'Learn about HFS (Help For Smile): our mission, values, transparency, and the team building bridges of hope worldwide.',
 }
 
 const values = [
@@ -18,7 +18,7 @@ const values = [
     icon: ShieldCheck,
     title: 'Radical transparency',
     description:
-      'We publish where every dollar goes, with independent audits and real-time campaign reporting.',
+      'We publish where every rupee goes, with independent audits and real-time campaign reporting.',
   },
   {
     icon: HandHeart,
@@ -48,7 +48,7 @@ export default function AboutPage() {
         <PageHeader
           eyebrow="About us"
           title="Bridging compassion and action since 2009"
-          description="HopeBridge began with a simple belief: that generosity, when paired with transparency and local partnership, can transform communities for good."
+          description="HFS (Help For Smile) began with a simple belief: that generosity, when paired with transparency and local partnership, can transform communities for good."
         />
 
         <section className="py-16">
@@ -74,7 +74,7 @@ export default function AboutPage() {
               <p className="mt-4 text-pretty leading-relaxed text-muted-foreground">
                 Over fifteen years, our model has remained the same: listen to
                 communities, fund what works, measure everything, and report
-                honestly. That discipline is why 94 cents of every dollar
+                honestly. That discipline is why 94% of every rupee
                 reaches the field and why our partners trust us to deliver.
               </p>
             </div>
@@ -125,13 +125,55 @@ export default function AboutPage() {
           </div>
         </section>
 
+        <section className="py-16 bg-background border-t border-border/50">
+          <div className="mx-auto grid max-w-7xl items-center gap-10 px-4 sm:px-6 lg:grid-cols-2 lg:px-8">
+            <div className="flex flex-col">
+              <span className="text-sm font-semibold uppercase tracking-wider text-brand">
+                Emergency & Disaster Relief
+              </span>
+              <h2 className="mt-2 font-heading text-3xl font-bold tracking-tight text-foreground sm:text-4xl">
+                Standing with the Government in Times of Need
+              </h2>
+              <p className="mt-4 text-pretty text-lg leading-relaxed text-muted-foreground">
+                HFS is committed to supporting local, state, and national government efforts during unforeseen emergencies. When disasters strike, we act swiftly as a trusted partner to coordinate resources and deliver direct, on-the-ground support.
+              </p>
+              <p className="mt-4 text-pretty leading-relaxed text-muted-foreground">
+                Whether deploying flood relief materials, setting up emergency medical camps, providing resources during healthcare pandemics, or assisting local authorities in major accidents, we work in alignment with governmental guidelines to ensure rapid and safe relief delivery.
+              </p>
+              <div className="mt-6 space-y-3">
+                <div className="flex items-start gap-3">
+                  <span className="flex size-6 shrink-0 items-center justify-center rounded-full bg-brand/10 text-brand font-bold text-xs">✓</span>
+                  <span className="text-sm font-medium text-foreground">Disaster Relief: Collaborating during cyclones, floods, and natural crises.</span>
+                </div>
+                <div className="flex items-start gap-3">
+                  <span className="flex size-6 shrink-0 items-center justify-center rounded-full bg-brand/10 text-brand font-bold text-xs">✓</span>
+                  <span className="text-sm font-medium text-foreground">Pandemic Response: Equipping health centers, supplying oxygen, and hygiene drives.</span>
+                </div>
+                <div className="flex items-start gap-3">
+                  <span className="flex size-6 shrink-0 items-center justify-center rounded-full bg-brand/10 text-brand font-bold text-xs">✓</span>
+                  <span className="text-sm font-medium text-foreground">Accident & Rescue Support: Supporting first responders with logistics and rehabilitation.</span>
+                </div>
+              </div>
+            </div>
+            <div className="relative aspect-[4/3] overflow-hidden rounded-3xl ring-1 ring-border">
+              <Image
+                src="/images/disaster-relief.png"
+                alt="Volunteers distributing emergency food and medical relief packages next to a government health camp"
+                fill
+                className="object-cover"
+                sizes="(max-width: 1024px) 100vw, 50vw"
+              />
+            </div>
+          </div>
+        </section>
+
         <section className="bg-secondary/40 py-16">
           <div className="mx-auto max-w-3xl px-4 text-center sm:px-6 lg:px-8">
             <h2 className="font-heading text-3xl font-bold tracking-tight text-foreground">
               Accountable to you
             </h2>
             <p className="mt-4 text-pretty text-lg leading-relaxed text-muted-foreground">
-              HopeBridge is a registered 501(c)(3) nonprofit. Our financials are
+              HFS is a registered nonprofit. Our financials are
               independently audited every year and published in full. We hold a
               top rating for transparency and accountability, because the trust
               you place in us is the foundation of everything we do.

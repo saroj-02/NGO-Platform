@@ -128,21 +128,21 @@ export const events: EventItem[] = [
   {
     title: 'Global Water Walk 2026',
     date: 'Apr 12, 2026',
-    location: 'Central Park, New York',
+    location: 'Lodhi Garden, New Delhi',
     type: 'Fundraiser',
     spots: '320 joined',
   },
   {
     title: 'Build Day: School Construction',
     date: 'May 03, 2026',
-    location: 'Sylhet, Bangladesh',
+    location: 'Bhubaneswar, Odisha',
     type: 'Volunteer',
     spots: '8 spots left',
   },
   {
     title: 'Community Meal Packing',
     date: 'May 18, 2026',
-    location: 'Chicago, IL',
+    location: 'Pune, Maharashtra',
     type: 'Community',
     spots: '45 spots left',
   },
@@ -164,15 +164,15 @@ export const volunteerRoles = [
   {
     title: 'Local Ambassador',
     description:
-      'Host events, raise awareness, and grow the HopeBridge community in your own city.',
+      'Host events, raise awareness, and grow the HFS community in your own city.',
     commitment: 'Ongoing',
   },
 ]
 
 export function formatCurrency(amount: number): string {
-  return new Intl.NumberFormat('en-US', {
+  return new Intl.NumberFormat('en-IN', {
     style: 'currency',
-    currency: 'USD',
+    currency: 'INR',
     maximumFractionDigits: 0,
   }).format(amount)
 }

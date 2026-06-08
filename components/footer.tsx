@@ -1,7 +1,8 @@
 import Link from 'next/link'
-import { Heart, Mail, MapPin, Phone } from 'lucide-react'
+import { Mail, MapPin, Phone } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
+import { SmileLogo } from '@/components/smile-logo'
 
 const footerNav = [
   {
@@ -39,28 +40,26 @@ export function Footer() {
       <div className="mx-auto max-w-7xl px-4 py-14 sm:px-6 lg:px-8">
         <div className="grid gap-10 lg:grid-cols-5">
           <div className="lg:col-span-2">
-            <Link href="/" className="flex items-center gap-2">
-              <span className="flex size-9 items-center justify-center rounded-lg bg-brand text-brand-foreground">
-                <Heart className="size-5" fill="currentColor" />
-              </span>
-              <span className="font-heading text-lg font-extrabold tracking-tight text-foreground">
-                HopeBridge
+            <Link href="/" className="flex items-center gap-2.5">
+              <SmileLogo className="size-12" />
+              <span className="font-heading text-xl font-extrabold tracking-tight text-foreground">
+                HFS
               </span>
             </Link>
             <p className="mt-4 max-w-sm text-pretty text-sm leading-relaxed text-muted-foreground">
               We connect compassionate people with communities in need, funding
               transparent campaigns for clean water, education, food, and
-              healthcare around the world.
+              healthcare across India.
             </p>
             <div className="mt-6 space-y-2 text-sm text-muted-foreground">
               <p className="flex items-center gap-2">
-                <MapPin className="size-4 text-brand" /> 120 Hope Street, New York, NY
+                <MapPin className="size-4 text-brand" /> SG Road, Ahmedabad, Gujarat, India
               </p>
               <p className="flex items-center gap-2">
-                <Mail className="size-4 text-brand" /> hello@hopebridge.org
+                <Mail className="size-4 text-brand" /> hello@helpforsmile.org
               </p>
               <p className="flex items-center gap-2">
-                <Phone className="size-4 text-brand" /> +1 (800) 555-0142
+                <Phone className="size-4 text-brand" /> +91 98765 43210
               </p>
             </div>
           </div>
@@ -116,8 +115,7 @@ export function Footer() {
 
         <div className="mt-10 flex flex-col items-center justify-between gap-4 border-t border-border pt-6 sm:flex-row">
           <p className="text-xs text-muted-foreground">
-            &copy; {new Date().getFullYear()} HopeBridge Foundation. A registered
-            501(c)(3) nonprofit. EIN 00-0000000.
+            &copy; {new Date().getFullYear()} HFS Foundation. A registered nonprofit.
           </p>
           <div className="flex gap-6 text-xs text-muted-foreground">
             <Link href="/about" className="hover:text-foreground">

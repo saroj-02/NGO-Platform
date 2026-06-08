@@ -8,16 +8,16 @@ import { CtaBanner } from '@/components/home/cta-banner'
 import { stories } from '@/lib/data'
 
 export const metadata = {
-  title: 'Impact Stories — HopeBridge',
+  title: 'Impact Stories — HFS',
   description:
-    'Real stories of lasting change from the communities you support around the world.',
+    'Real stories of lasting change from the communities you support across India.',
 }
 
 const testimonials = [
   {
     quote:
-      'HopeBridge shows me exactly where my monthly gift goes. I have watched a whole village transform over two years.',
-    name: 'Daniel R.',
+      'HFS shows me exactly where my monthly gift goes. I have watched a whole village transform over two years.',
+    name: 'Dinesh K.',
     role: 'Monthly donor since 2021',
   },
   {

@@ -9,9 +9,9 @@ import { VolunteerForm } from '@/components/volunteer-form'
 import { events, volunteerRoles } from '@/lib/data'
 
 export const metadata = {
-  title: 'Volunteer & Events — HopeBridge',
+  title: 'Volunteer & Events — HFS',
   description:
-    'Give your time and skills. Explore volunteer roles and upcoming events with HopeBridge.',
+    'Give your time and skills. Explore volunteer roles and upcoming events with HFS (Help For Smile).',
 }
 
 const eventTypeStyles: Record<string, string> = {
@@ -116,10 +116,10 @@ export default function VolunteerPage() {
                 Ready to make a difference?
               </h2>
               <p className="mt-4 text-pretty text-lg leading-relaxed text-muted-foreground">
-                Volunteering with HopeBridge is flexible and rewarding. Our
+                Volunteering with HFS is flexible and rewarding. Our
                 coordinators will match you with opportunities that fit your
-                schedule, skills, and passions—from a single afternoon to an
-                international build trip.
+                schedule, skills, and passions—from a single afternoon to a
+                dedicated field project.
               </p>
               <ul className="mt-6 space-y-3 text-muted-foreground">
                 <li className="flex items-center gap-3">

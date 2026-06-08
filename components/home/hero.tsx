@@ -10,13 +10,13 @@ export function Hero() {
         <div className="flex flex-col">
           <span className="inline-flex w-fit items-center gap-2 rounded-full bg-brand/10 px-3 py-1 text-sm font-medium text-brand">
             <ShieldCheck className="size-4" />
-            94% of every dollar reaches the field
+            94% of every rupee reaches the field
           </span>
           <h1 className="mt-6 text-balance font-heading text-4xl font-extrabold leading-[1.05] tracking-tight text-foreground sm:text-5xl lg:text-6xl">
             Building bridges of hope for communities worldwide
           </h1>
           <p className="mt-6 max-w-xl text-pretty text-lg leading-relaxed text-muted-foreground">
-            HopeBridge connects compassionate donors and volunteers with people
+            HFS (Help For Smile) connects compassionate donors and volunteers with people
             in need. Fund clean water, education, food, and healthcare with full
             transparency from gift to impact.
           </p>
@@ -44,9 +44,9 @@ export function Hero() {
             <div className="h-10 w-px bg-border" />
             <div>
               <p className="font-heading text-2xl font-bold text-foreground">
-                46
+                28
               </p>
-              <p>Countries reached</p>
+              <p>States reached</p>
             </div>
             <div className="h-10 w-px bg-border" />
             <div>
@@ -74,7 +74,7 @@ export function Hero() {
               This month together
             </p>
             <p className="font-heading text-xl font-bold text-brand">
-              $2.1M raised
+              ₹18Cr raised
             </p>
           </div>
         </div>

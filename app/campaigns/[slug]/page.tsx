@@ -20,15 +20,15 @@ export async function generateMetadata({
 }) {
   const { slug } = await params
   const campaign = campaigns.find((c) => c.slug === slug)
-  if (!campaign) return { title: 'Campaign — HopeBridge' }
+  if (!campaign) return { title: 'Campaign — HFS' }
   return {
-    title: `${campaign.title} — HopeBridge`,
+    title: `${campaign.title} — HFS`,
     description: campaign.summary,
   }
 }
 
 const highlights = [
-  'Verified by HopeBridge field teams on the ground',
+  'Verified by HFS field teams on the ground',
   'Transparent reporting with photos and receipts',
   '94% of funds go directly to program delivery',
 ]
