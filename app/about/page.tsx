@@ -1,3 +1,5 @@
+export const dynamic = 'force-dynamic'
+
 import Image from 'next/image'
 import { Eye, HandHeart, ShieldCheck, Target } from 'lucide-react'
 import { Navbar } from '@/components/navbar'
@@ -5,7 +7,7 @@ import { Footer } from '@/components/footer'
 import { PageHeader } from '@/components/page-header'
 import { Card } from '@/components/ui/card'
 import { CtaBanner } from '@/components/home/cta-banner'
-import { impactStats } from '@/lib/data'
+import { ImpactStats } from '@/components/home/impact-stats'
 
 export const metadata = {
   title: 'About — HFS',
@@ -81,20 +83,7 @@ export default function AboutPage() {
           </div>
         </section>
 
-        <section className="bg-brand py-14 text-brand-foreground">
-          <div className="mx-auto grid max-w-7xl grid-cols-2 gap-8 px-4 sm:px-6 lg:grid-cols-4 lg:px-8">
-            {impactStats.map((stat) => (
-              <div key={stat.label} className="text-center">
-                <p className="font-heading text-3xl font-extrabold sm:text-4xl">
-                  {stat.value}
-                </p>
-                <p className="mt-1 text-sm text-brand-foreground/80">
-                  {stat.label}
-                </p>
-              </div>
-            ))}
-          </div>
-        </section>
+        <ImpactStats />
 
         <section className="py-16">
           <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">

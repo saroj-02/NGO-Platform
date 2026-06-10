@@ -17,6 +17,7 @@ function SimulatorContent() {
   const slug = params?.slug as string
   const amountStr = searchParams.get('amount') || '1000'
   const donorEmail = searchParams.get('donorEmail') || 'donor@email.com'
+  const donorName = searchParams.get('donorName') || 'Guest Donor'
   const recurringStr = searchParams.get('recurring') || 'false'
 
   const campaign = campaigns.find((c) => c.slug === slug)
@@ -38,7 +39,7 @@ function SimulatorContent() {
     const value = e.target.value.replace(/\D/g, '')
     const formatted = value.match(/.{1,4}/g)?.join(' ') || value
     setCardNumber(formatted.substring(0, 19))
-    setErrors((prev) => ({ ...prev, card: '' }))
+    setErrors((prev: Record<string, string>) => ({ ...prev, card: '' }))
   }
 
   // Format Expiry MM/YY
@@ -48,13 +49,13 @@ function SimulatorContent() {
       value = `${value.slice(0, 2)}/${value.slice(2, 4)}`
     }
     setCardExpiry(value.substring(0, 5))
-    setErrors((prev) => ({ ...prev, expiry: '' }))
+    setErrors((prev: Record<string, string>) => ({ ...prev, expiry: '' }))
   }
 
   const handleCvvChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value.replace(/\D/g, '')
     setCardCvv(value.substring(0, 4))
-    setErrors((prev) => ({ ...prev, cvv: '' }))
+    setErrors((prev: Record<string, string>) => ({ ...prev, cvv: '' }))
   }
 
   const handlePayment = (e: React.FormEvent) => {
@@ -91,7 +92,7 @@ function SimulatorContent() {
         setTimeout(() => {
           const mockSessionId = `sim_session_${Math.random().toString(36).substr(2, 9)}`
           router.replace(
-            `/campaigns/${slug}?success=true&amount=${amount}&session_id=${mockSessionId}`
+            `/campaigns/${slug}?success=true&amount=${amount}&session_id=${mockSessionId}&donorEmail=${encodeURIComponent(donorEmail)}&donorName=${encodeURIComponent(donorName)}`
           )
         }, 800)
       }, 1000)

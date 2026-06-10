@@ -1,13 +1,16 @@
+export const dynamic = 'force-dynamic'
+
 import Image from 'next/image'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
-import { ArrowLeft, CheckCircle2, MapPin, Users } from 'lucide-react'
+import { ArrowLeft, CheckCircle2, Users } from 'lucide-react'
 import { Navbar } from '@/components/navbar'
 import { Footer } from '@/components/footer'
 import { Badge } from '@/components/ui/badge'
 import { Progress } from '@/components/ui/progress'
 import { DonationWidget } from '@/components/donation-widget'
-import { campaigns, formatCurrency } from '@/lib/data'
+import { formatCurrency, campaigns } from '@/lib/data'
+import { getCampaign } from '@/lib/db'
 
 export function generateStaticParams() {
   return campaigns.map((c) => ({ slug: c.slug }))
@@ -19,7 +22,7 @@ export async function generateMetadata({
   params: Promise<{ slug: string }>
 }) {
   const { slug } = await params
-  const campaign = campaigns.find((c) => c.slug === slug)
+  const campaign = getCampaign(slug)
   if (!campaign) return { title: 'Campaign — HFS' }
   return {
     title: `${campaign.title} — HFS`,
@@ -39,8 +42,11 @@ export default async function CampaignDetailPage({
   params: Promise<{ slug: string }>
 }) {
   const { slug } = await params
-  const campaign = campaigns.find((c) => c.slug === slug)
-  if (!campaign) notFound()
+  const campaign = getCampaign(slug)
+  if (!campaign) {
+    notFound()
+    return null
+  }
 
   const pct = Math.min(100, Math.round((campaign.raised / campaign.goal) * 100))
 
@@ -72,10 +78,7 @@ export default async function CampaignDetailPage({
                 </Badge>
               </div>
 
-              <p className="mt-6 flex items-center gap-1.5 text-sm font-medium text-muted-foreground">
-                <MapPin className="size-4 text-brand" /> {campaign.location}
-              </p>
-              <h1 className="mt-2 text-balance font-heading text-3xl font-extrabold tracking-tight text-foreground sm:text-4xl">
+              <h1 className="mt-6 text-balance font-heading text-3xl font-extrabold tracking-tight text-foreground sm:text-4xl">
                 {campaign.title}
               </h1>
 

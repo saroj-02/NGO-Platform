@@ -1,9 +1,10 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { CampaignCard } from '@/components/campaign-card'
-import { campaigns, type Campaign } from '@/lib/data'
+import { type Campaign } from '@/lib/data'
 import { cn } from '@/lib/utils'
+import { Loader2 } from 'lucide-react'
 
 const categories: ('All' | Campaign['category'])[] = [
   'All',
@@ -15,11 +16,34 @@ const categories: ('All' | Campaign['category'])[] = [
 
 export function CampaignsGrid() {
   const [active, setActive] = useState<(typeof categories)[number]>('All')
+  const [campaignsList, setCampaignsList] = useState<Campaign[]>([])
+  const [loading, setLoading] = useState(true)
+
+  useEffect(() => {
+    fetch('/api/campaigns')
+      .then((res) => res.json())
+      .then((data) => {
+        setCampaignsList(data)
+        setLoading(false)
+      })
+      .catch((err) => {
+        console.error('Failed to fetch campaigns', err)
+        setLoading(false)
+      })
+  }, [])
+
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center py-20 bg-background">
+        <Loader2 className="size-8 animate-spin text-brand" />
+      </div>
+    )
+  }
 
   const filtered =
     active === 'All'
-      ? campaigns
-      : campaigns.filter((c) => c.category === active)
+      ? campaignsList
+      : campaignsList.filter((c) => c.category === active)
 
   return (
     <section className="bg-background py-14">

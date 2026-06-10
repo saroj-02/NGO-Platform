@@ -2,10 +2,10 @@ import Link from 'next/link'
 import { ArrowRight } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { CampaignCard } from '@/components/campaign-card'
-import { campaigns } from '@/lib/data'
+import { getCampaigns } from '@/lib/db'
 
 export function FeaturedCampaigns() {
-  const featured = campaigns.filter((c) => c.featured)
+  const featured = getCampaigns().filter((c) => c.featured)
 
   return (
     <section className="bg-background py-20">

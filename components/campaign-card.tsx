@@ -1,6 +1,6 @@
 import Image from 'next/image'
 import Link from 'next/link'
-import { MapPin, Users } from 'lucide-react'
+import { Users } from 'lucide-react'
 import { Card } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Progress } from '@/components/ui/progress'
@@ -35,10 +35,7 @@ export function CampaignCard({ campaign }: { campaign: Campaign }) {
       </div>
 
       <div className="flex flex-1 flex-col p-5">
-        <p className="flex items-center gap-1.5 text-xs font-medium text-muted-foreground">
-          <MapPin className="size-3.5" /> {campaign.location}
-        </p>
-        <h3 className="mt-2 font-heading text-lg font-bold leading-snug text-foreground">
+        <h3 className="font-heading text-lg font-bold leading-snug text-foreground">
           {campaign.title}
         </h3>
         <p className="mt-2 line-clamp-2 flex-1 text-sm leading-relaxed text-muted-foreground">

@@ -3,7 +3,7 @@
 import { useState, useEffect, Suspense } from 'react'
 import Link from 'next/link'
 import { useSearchParams } from 'next/navigation'
-import { Check, CreditCard, Heart, Loader2, ArrowLeft, ArrowRight, User, QrCode, Smartphone } from 'lucide-react'
+import { Check, CreditCard, Heart, Loader2, ArrowLeft, ArrowRight, User, QrCode, Smartphone, AlertCircle } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
@@ -41,7 +41,20 @@ function DonationWidgetContent({ campaign }: { campaign: Campaign }) {
   const [errors, setErrors] = useState<Record<string, string>>({})
   const [isProcessing, setIsProcessing] = useState(false)
 
+  // UPI automated status tracking
+  const [upiSessionId, setUpiSessionId] = useState<string | null>(null)
+  const [timeLeft, setTimeLeft] = useState<number>(300) // 5 minutes countdown
+  
+  // Completed donation validation ID
+  const [donationId, setDonationId] = useState<string | null>(null)
+
   const activeAmount = custom ? Number(custom) || 0 : amount
+
+  const formatTimeLeft = (seconds: number) => {
+    const mins = Math.floor(seconds / 60)
+    const secs = seconds % 60
+    return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`
+  }
 
   // Fetch UPI VPA Merchant ID from environment variable (falls back to placeholder)
   const upiId = process.env.NEXT_PUBLIC_UPI_ID || 'sarojpadhi@upi'
@@ -52,6 +65,9 @@ function DonationWidgetContent({ campaign }: { campaign: Campaign }) {
   // Handle Stripe Redirection Query Parameters
   useEffect(() => {
     if (success === 'true' && queryAmount && sessionId) {
+      const queryEmail = searchParams.get('donorEmail') || 'guest_donor@gmail.com'
+      const queryName = searchParams.get('donorName') || 'Guest Donor'
+      
       try {
         const loggedSessionsStr = localStorage.getItem('ngo_logged_donations')
         const loggedSessions = loggedSessionsStr ? JSON.parse(loggedSessionsStr) : []
@@ -78,14 +94,44 @@ function DonationWidgetContent({ campaign }: { campaign: Campaign }) {
               amount: finalAmount,
               date: new Date().toISOString(),
               recurring: false,
-              donorName: 'Guest Donor',
-              donorEmail: 'guest_donor@gmail.com',
+              donorName: queryName,
+              donorEmail: queryEmail,
             }
             localStorage.setItem('ngo_guest_donations', JSON.stringify([...guestDonations, newDonation]))
           }
           
+          // Send server request to record the donation in dynamic database
+          fetch('/api/campaigns/donate', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              slug: campaign.slug,
+              amount: finalAmount,
+              sessionId,
+              donorName: queryName,
+              donorEmail: queryEmail
+            }),
+          })
+            .then((res) => res.json())
+            .then((data) => {
+              if (data.donationId) {
+                setDonationId(data.donationId)
+              }
+            })
+            .catch((err) => console.error('Failed to record Stripe donation in database', err))
+
           // Mark session ID as logged
           localStorage.setItem('ngo_logged_donations', JSON.stringify([...loggedSessions, sessionId]))
+        } else {
+          // Retrieve donationId on page refresh
+          fetch(`/api/donations/status?sessionId=${sessionId}`)
+            .then((res) => res.json())
+            .then((data) => {
+              if (data.success && data.donationId) {
+                setDonationId(data.donationId)
+              }
+            })
+            .catch((err) => console.error('Error fetching status for refresh', err))
         }
       } catch (err) {
         console.error('Failed to log successful Stripe redirect donation', err)
@@ -99,6 +145,91 @@ function DonationWidgetContent({ campaign }: { campaign: Campaign }) {
       setStep('amount')
     }
   }, [success, queryAmount, sessionId, cancelled, user, campaign])
+
+  // Poll payment status & countdown timer
+  useEffect(() => {
+    if (step !== 'payment' || paymentMethod !== 'upi') {
+      // Clean up when leaving UPI payment panel
+      setUpiSessionId(null)
+      setTimeLeft(300)
+      return
+    }
+
+    // Initialize mock session ID if not set
+    let activeSessionId = upiSessionId
+    if (!activeSessionId) {
+      const newId = `upi_${Math.random().toString(36).substr(2, 9)}`
+      setUpiSessionId(newId)
+      activeSessionId = newId
+    }
+
+    // Reset timer to 5 minutes
+    setTimeLeft(300)
+
+    // Timer Interval
+    const timerInterval = setInterval(() => {
+      setTimeLeft((prev) => {
+        if (prev <= 1) {
+          clearInterval(timerInterval)
+          return 0
+        }
+        return prev - 1
+      })
+    }, 1000)
+
+    // Polling Interval: check status every 3 seconds
+    const pollInterval = setInterval(() => {
+      fetch(`/api/donations/status?sessionId=${activeSessionId}`)
+        .then((res) => res.json())
+        .then((data) => {
+          if (data.success) {
+            clearInterval(timerInterval)
+            clearInterval(pollInterval)
+            
+            if (data.donationId) {
+              setDonationId(data.donationId)
+            }
+
+            // Record local donation history so it shows on user dashboard
+            if (user) {
+              addDonation({
+                campaignSlug: campaign.slug,
+                campaignTitle: campaign.title,
+                amount: activeAmount,
+                recurring,
+              })
+            } else {
+              const guestDonationsStr = localStorage.getItem('ngo_guest_donations')
+              const guestDonations = guestDonationsStr ? JSON.parse(guestDonationsStr) : []
+              const newDonation = {
+                id: Math.random().toString(36).substr(2, 9),
+                campaignSlug: campaign.slug,
+                campaignTitle: campaign.title,
+                amount: activeAmount,
+                date: new Date().toISOString(),
+                recurring,
+                donorName,
+                donorEmail,
+              }
+              localStorage.setItem('ngo_guest_donations', JSON.stringify([...guestDonations, newDonation]))
+            }
+            
+            // Log local session ID to prevent duplicates
+            const loggedSessionsStr = localStorage.getItem('ngo_logged_donations')
+            const loggedSessions = loggedSessionsStr ? JSON.parse(loggedSessionsStr) : []
+            localStorage.setItem('ngo_logged_donations', JSON.stringify([...loggedSessions, activeSessionId]))
+            
+            setStep('done')
+          }
+        })
+        .catch((err) => console.error('Error polling status', err))
+    }, 3000)
+
+    return () => {
+      clearInterval(timerInterval)
+      clearInterval(pollInterval)
+    }
+  }, [step, paymentMethod, upiSessionId, user, campaign, activeAmount, recurring, donorName, donorEmail])
 
   // Auto-prefill donor details when user is signed in
   useEffect(() => {
@@ -161,6 +292,7 @@ function DonationWidgetContent({ campaign }: { campaign: Campaign }) {
           campaignTitle: campaign.title,
           campaignSlug: campaign.slug,
           donorEmail: donorEmail,
+          donorName: donorName,
           recurring,
         }),
       })
@@ -177,53 +309,6 @@ function DonationWidgetContent({ campaign }: { campaign: Campaign }) {
       setErrors({ general: err.message || 'Unable to connect to the secure payment server. Please try again.' })
       setIsProcessing(false)
     }
-  }
-
-  // Step 3: Complete Direct UPI Payment
-  const handleCompleteUpiPayment = () => {
-    setIsProcessing(true)
-    setErrors({})
-
-    // Simulate instant UPI transaction status verification
-    setTimeout(() => {
-      try {
-        const mockUpiSessionId = `upi_session_${Math.random().toString(36).substr(2, 9)}`
-        
-        if (user) {
-          addDonation({
-            campaignSlug: campaign.slug,
-            campaignTitle: campaign.title,
-            amount: activeAmount,
-            recurring,
-          })
-        } else {
-          // Log for Guest user
-          const guestDonationsStr = localStorage.getItem('ngo_guest_donations')
-          const guestDonations = guestDonationsStr ? JSON.parse(guestDonationsStr) : []
-          const newDonation = {
-            id: Math.random().toString(36).substr(2, 9),
-            campaignSlug: campaign.slug,
-            campaignTitle: campaign.title,
-            amount: activeAmount,
-            date: new Date().toISOString(),
-            recurring,
-            donorName,
-            donorEmail,
-          }
-          localStorage.setItem('ngo_guest_donations', JSON.stringify([...guestDonations, newDonation]))
-        }
-        
-        // Mark session ID as logged to prevent duplicates
-        const loggedSessionsStr = localStorage.getItem('ngo_logged_donations')
-        const loggedSessions = loggedSessionsStr ? JSON.parse(loggedSessionsStr) : []
-        localStorage.setItem('ngo_logged_donations', JSON.stringify([...loggedSessions, mockUpiSessionId]))
-      } catch (err) {
-        console.error('Failed to log successful UPI donation', err)
-      }
-
-      setIsProcessing(false)
-      setStep('done')
-    }, 2000)
   }
 
   // Success Step Card
@@ -244,6 +329,21 @@ function DonationWidgetContent({ campaign }: { campaign: Campaign }) {
           supporting the {campaign.title} campaign. A receipt has been generated and dispatched to your inbox.
         </p>
         
+        {donationId && (
+          <div className="mt-5 grid grid-cols-2 gap-3">
+            <Button asChild variant="outline" className="border-brand/35 hover:bg-brand/5 font-semibold text-xs py-5">
+              <Link href={`/email-preview/${donationId}`} target="_blank">
+                View Email Receipt
+              </Link>
+            </Button>
+            <Button asChild className="bg-brand text-brand-foreground hover:bg-brand/90 font-semibold text-xs py-5">
+              <Link href={`/certificate/${donationId}`} target="_blank">
+                Download Certificate
+              </Link>
+            </Button>
+          </div>
+        )}
+        
         {!user && (
           <div className="mt-5 rounded-xl bg-secondary/60 p-4 text-xs text-left border border-border">
             <span className="font-bold text-foreground flex items-center gap-1.5 mb-1 text-sm">
@@ -261,6 +361,7 @@ function DonationWidgetContent({ campaign }: { campaign: Campaign }) {
           onClick={() => {
             setStep('amount')
             setCustom('')
+            setDonationId(null)
           }}
         >
           Make another donation
@@ -549,57 +650,71 @@ function DonationWidgetContent({ campaign }: { campaign: Campaign }) {
           {/* PANEL B: DIRECT UPI CODE GENERATION */}
           {paymentMethod === 'upi' && (
             <div className="space-y-4 text-center">
-              {/* Dynamic QR Code Generator */}
-              <div className="mx-auto max-w-[170px] bg-white p-2 rounded-2xl border border-border shadow-sm flex items-center justify-center">
-                <img
-                  src={`https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${encodeURIComponent(upiUrl)}`}
-                  alt="Scan to Donate via UPI"
-                  className="size-36 object-contain"
-                />
-              </div>
+              {timeLeft === 0 ? (
+                <div className="space-y-4 py-6 text-center animate-in fade-in duration-300">
+                  <AlertCircle className="mx-auto size-12 text-destructive animate-bounce" />
+                  <h4 className="font-heading text-base font-bold text-foreground">Verification Timed Out</h4>
+                  <p className="text-xs text-muted-foreground leading-relaxed max-w-xs mx-auto">
+                    We could not verify your payment within the 5-minute window. If you have already completed the payment, please contact HFS support.
+                  </p>
+                  <Button
+                    onClick={() => {
+                      setStep('amount')
+                      setErrors({})
+                    }}
+                    className="w-full bg-secondary text-secondary-foreground hover:bg-border font-semibold"
+                  >
+                    Go Back and Retry
+                  </Button>
+                </div>
+              ) : (
+                <>
+                  {/* Dynamic QR Code Generator */}
+                  <div className="mx-auto max-w-[170px] bg-white p-2 rounded-2xl border border-border shadow-sm flex items-center justify-center">
+                    <img
+                      src={`https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${encodeURIComponent(upiUrl)}`}
+                      alt="Scan to Donate via UPI"
+                      className="size-36 object-contain"
+                    />
+                  </div>
 
-              <div className="space-y-1">
-                <p className="text-xs font-semibold text-foreground">Scan with GPay, Paytm, or PhonePe</p>
-                <p className="text-[10px] text-muted-foreground">UPI ID: <span className="font-bold text-foreground">{upiId}</span></p>
-              </div>
+                  <div className="space-y-1">
+                    <p className="text-xs font-semibold text-foreground">Scan with GPay, Paytm, or PhonePe</p>
+                    <p className="text-[10px] text-muted-foreground">UPI ID: <span className="font-bold text-foreground">{upiId}</span></p>
+                  </div>
 
-              {/* Deep Link Intent for Mobile Browsers */}
-              <div className="flex flex-col gap-2">
-                <a
-                  href={upiUrl}
-                  className="flex items-center justify-center gap-1.5 w-full bg-secondary border border-border text-foreground hover:bg-secondary/80 font-bold py-2.5 rounded-xl text-xs transition-colors"
-                >
-                  <Smartphone className="size-4 text-brand" /> Pay Directly via UPI App
-                </a>
-                
-                <Button
-                  onClick={handleCompleteUpiPayment}
-                  disabled={isProcessing}
-                  className="w-full bg-brand text-brand-foreground hover:bg-brand/90 font-bold shadow-md"
-                  size="lg"
-                >
-                  {isProcessing ? (
-                    <>
-                      <Loader2 className="mr-1.5 size-4 animate-spin" /> Confirming Payment…
-                    </>
-                  ) : (
-                    <>
-                      <Check className="mr-1.5 size-4" /> I have completed the Payment
-                    </>
-                  )}
-                </Button>
-              </div>
+                  {/* Deep Link Intent for Mobile Browsers */}
+                  <div className="flex flex-col gap-2">
+                    <a
+                      href={upiUrl}
+                      className="flex items-center justify-center gap-1.5 w-full bg-secondary border border-border text-foreground hover:bg-secondary/80 font-bold py-2.5 rounded-xl text-xs transition-colors"
+                    >
+                      <Smartphone className="size-4 text-brand" /> Pay Directly via UPI App
+                    </a>
+                  </div>
 
-              <p className="text-[9px] text-muted-foreground leading-normal">
-                Donations are transferred directly to the HFS Foundation bank account. Please click confirm once your UPI app marks the transaction successful.
-              </p>
+                  {/* Countdown Timer and Loader */}
+                  <div className="mt-4 p-4 rounded-xl bg-secondary/40 border border-border space-y-2.5">
+                    <div className="flex items-center justify-center gap-2 text-xs font-bold text-foreground">
+                      <Loader2 className="size-4 animate-spin text-brand" />
+                      Waiting for UPI payment verification...
+                    </div>
+                    <div className="text-lg font-mono font-extrabold text-brand animate-pulse">
+                      {formatTimeLeft(timeLeft)}
+                    </div>
+                    <p className="text-[9px] text-muted-foreground leading-normal">
+                      Do not close this panel. Once your UPI app confirms transfer, this screen will update automatically.
+                    </p>
+                  </div>
+                </>
+              )}
             </div>
           )}
         </div>
       )}
 
       <p className="mt-4 text-center text-xs text-muted-foreground">
-        Secure payment. 94% goes directly to programs. Tax-deductible.
+        Secure payment. 96% goes directly to programs. Tax-deductible.
       </p>
     </div>
   )

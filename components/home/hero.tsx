@@ -37,7 +37,7 @@ export function Hero() {
           <div className="mt-10 flex items-center gap-6 text-sm text-muted-foreground">
             <div>
               <p className="font-heading text-2xl font-bold text-foreground">
-                2.4M+
+                786K+
               </p>
               <p>Lives impacted</p>
             </div>
@@ -51,7 +51,7 @@ export function Hero() {
             <div className="h-10 w-px bg-border" />
             <div>
               <p className="font-heading text-2xl font-bold text-foreground">
-                100K+
+                8.9K+
               </p>
               <p>Active donors</p>
             </div>
@@ -74,7 +74,7 @@ export function Hero() {
               This month together
             </p>
             <p className="font-heading text-xl font-bold text-brand">
-              ₹18Cr raised
+              ₹8Cr raised
             </p>
           </div>
         </div>
